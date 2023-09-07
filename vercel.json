@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "name": "ecommerce-app",
+  "builds": [{ "src": "index.js", "use": "@vercel/node","config": {"maxPayloadSize": 52428800} }],
+  "routes": [{ "src": "/(.*)", "dest": "index.js" }]
+}
