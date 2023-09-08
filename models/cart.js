@@ -31,6 +31,9 @@ const ProductSchema = new Schema(
       type: Number,
       required: true,
     },
+    cardItem: {
+      type: [CardSchema],
+    },
   },
   { _id: false }
 );
@@ -44,9 +47,6 @@ const CartSchema = new Schema(
     amount: {
       type: Number,
       required: true,
-    },
-    cardItem: {
-      type: [CardSchema],
     },
   },
   { _id: false }

@@ -13,6 +13,7 @@ const LikeProductRoutes = require("./routes/LikeProduct");
 const ProductCommentsRoutes = require("./routes/productComments");
 const ChatRoomRoutes = require("./routes/ChatRoom");
 const MessageRoutes = require("./routes/Message");
+const FeedRoutes = require("./routes/Feeds");
 // var multer = require('multer');
 // var upload = multer();
 
@@ -71,3 +72,5 @@ app.use(ProductCommentsRoutes);
 app.use(ChatRoomRoutes);
 
 app.use(MessageRoutes);
+
+app.use(FeedRoutes);
