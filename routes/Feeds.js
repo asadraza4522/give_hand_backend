@@ -5,7 +5,7 @@ const { ValidateToken } = require("../controller/AuthController");
 const uploadVideo = require("../middleware/uploadVideo");
 
 router.post(
-  "/api/feed/addFeed",
+  "/api/feed/addFeed/UploadVideo",
   ValidateToken,
   uploadVideo.single("video"),
   FeedsController.createFeed
