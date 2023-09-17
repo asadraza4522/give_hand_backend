@@ -48,6 +48,9 @@ const CartSchema = new Schema(
       type: Number,
       required: true,
     },
+    donationAmount: {
+      type: Number,
+    },
   },
   { _id: false }
 );

@@ -194,7 +194,11 @@ const UpdateQty = (req, res) => {
         { path: "cart.products.productID", select: "price discountPrice" },
       ])
       .populate([
-        { path: "cart.cardItem.productID", select: "price discountPrice" },
+        {
+          path: "cart.products.cardItem.productID",
+          match: { "cart.products.cardItem": { $ne: null } },
+          select: "price discountPrice",
+        },
       ])
       .then((userCart) => {
         if (userCart) {
@@ -237,7 +241,6 @@ const UpdateQty = (req, res) => {
               userCart.cart.amount = prevTotal;
               response.message = "Product Deleted from cart";
             }
-
             Cart.findOneAndUpdate(
               { user: req?.body?.user },
               userCart,
@@ -269,10 +272,77 @@ const UpdateQty = (req, res) => {
     res.send(error);
   }
 };
+const UpdateDonation = (req, res) => {
+  const response = new Response();
+
+  try {
+    Cart.findOne({ user: req?.body?.user })
+      .populate([
+        { path: "cart.products.productID", select: "price discountPrice" },
+      ])
+      .populate([
+        {
+          path: "cart.products.cardItem.productID",
+          match: { "cart.products.cardItem": { $ne: null } },
+          select: "price discountPrice",
+        },
+      ])
+      .then((userCart) => {
+        if (userCart) {
+          console.log(
+            "🚀 ~ file: CartController.js:192 ~ .then ~ userCart:",
+            userCart
+          );
+          let prevTotal = userCart.cart.amount;
+
+          if (req?.body?.donationAmount != 0) {
+            prevTotal += req.body.donationAmount;
+            userCart.cart.donationAmount = req?.body?.donationAmount;
+            userCart.cart.amount = prevTotal;
+          } else {
+            console.log(
+              "🚀 ~ file: CartController.js:304 ~ .then ~ userCart.cart.donationAmount:",
+              userCart.cart.donationAmount
+            );
+            console.log(
+              "🚀 ~ file: CartController.js:304 ~ .then ~ prevTotal:",
+              prevTotal
+            );
+            userCart.cart.donationAmount = null;
+            userCart.cart.amount = prevTotal - userCart.cart.donationAmount;
+          }
+
+          Cart.findOneAndUpdate(
+            { user: req?.body?.user },
+            userCart,
+            (error, data) => {
+              if (error) {
+                response.message = "Maybe wrong id";
+                response.error = true;
+              }
+            }
+          );
+
+          res.send(response);
+        } else {
+          response.message = "Invalid User ID";
+          response.error = true;
+          res.send(response);
+        }
+      })
+      .catch((error) => {
+        res.send(error);
+      });
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+};
 
 module.exports = {
   addCartItem,
   viewCart,
   UpdateQty,
   deleteCart,
+  UpdateDonation,
 };

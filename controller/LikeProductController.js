@@ -70,13 +70,17 @@ const likeProduct = async (req, res) => {
 
 const viewProductLikes = (req, res) => {
   const response = new Response();
-  console.log("viewProductLikes", req);
+  console.log("viewProductLikes", req.params);
   const search = req?.params?.user;
 
   try {
     LikeProduct.find(
       search != null ? { user: { $regex: search, $options: "i" } } : {}
     )
+      .populate({
+        path: "productID",
+        select: "name price image discountPrice productType",
+      })
       .then((result) => {
         response.data = result;
         response.message = "Success";

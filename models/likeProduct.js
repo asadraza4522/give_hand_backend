@@ -7,7 +7,7 @@ const LikeProductSchema = new Schema(
     productID: {
       type: String,
       required: true,
-      ref: "product",
+      ref: "products",
     },
     user: {
       type: String,
